@@ -1,0 +1,4 @@
+services:
+  api:
+    volumes:
+      - ~/.aws:/home/appuser/.aws:ro    # local dev only; EC2 uses an IAM role instead

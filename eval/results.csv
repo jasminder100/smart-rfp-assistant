@@ -1,0 +1,56 @@
+id,question,answerable,expected_sources,cited_sources,top_distance,passed,reason,answer
+1,What is your data encryption policy?,True,02_information_security_policy.md,02_information_security_policy.md,0.973,True,correct,"NimbusEdge Technologies employs a robust data encryption policy to ensure the highest level of security for our clients' data. 
+
+- **Data at rest:** All client data at rest is encrypted using AES-256. On AWS, we use AWS KMS with customer-managed keys (CMKs); on Azure, we use Azure Key Vault. [02_information_security_policy.md]
+- **Key rotation:** Encryption keys are rotated automatically every 365 days, or immediately if a compromise is suspected. [02_information_security_policy.md]
+- **Data in transit:** All data in transit is encrypted with TLS 1.2 or higher. TLS 1.0 and 1.1 are disabled on all endpoints we manage. [02_information_security_policy.md]
+- **Backups:** Backups are encrypted with the same AES-256 standard and stored in a separate account or subscription. [02_information_security_policy.md]"
+2,What are your RPO and RTO commitments?,True,04_disaster_recovery_and_bcp.pdf,04_disaster_recovery_and_bcp.pdf,1.341,True,correct,"NimbusEdge Technologies provides the following Recovery Point Objective (RPO) and Recovery Time Objective (RTO) commitments for our managed services:
+
+- **Standard Managed Service Tier:**
+  - **Recovery Point Objective (RPO):** 15 minutes for production databases. [04_disaster_recovery_and_bcp.pdf]
+  - **Recovery Time Objective (RTO):** 4 hours for Tier-1 applications and 24 hours for Tier-2 applications. [04_disaster_recovery_and_bcp.pdf]
+
+- **Premium Tier (on request):**
+  - **Recovery Point Objective (RPO):** Under 1 minute.
+  - **Recovery Time Objective (RTO):** Under 1 hour, using an active-active multi-region architecture. [04_disaster_recovery_and_bcp.pdf]
+
+These objectives are designed to ensure minimal data loss and rapid recovery in the event of a disruption."
+3,What is your response time for a critical P1 incident?,True,06_managed_services_sla.md,06_managed_services_sla.md,1.351,True,correct,Our response time for a critical P1 incident is 15 minutes. [06_managed_services_sla.md]
+4,What availability SLA do you commit to?,True,06_managed_services_sla.md,06_managed_services_sla.md,1.025,True,correct,"NimbusEdge Technologies commits to 99.95% monthly availability for the infrastructure we manage. If availability falls below this target, service credits apply: 5% of the monthly fee for each 0.1% below target, capped at 20%. [06_managed_services_sla.md]"
+5,What methodology do you follow for cloud migrations?,True,03_cloud_migration_methodology.md,03_cloud_migration_methodology.md,0.764,True,correct,"NimbusEdge Technologies follows the NimbusPath methodology for cloud migrations. This five-phase framework is designed to migrate workloads to the cloud with minimal downtime and controlled costs. 
+
+1. **Discover (2–4 weeks):** Automated discovery of servers, applications, and dependencies using AWS Application Discovery Service or Azure Migrate. Output: a complete application inventory and dependency map. [03_cloud_migration_methodology.md]
+
+2. **Assess and Plan (2–3 weeks):** Each application is assigned one of the ""7 Rs"" strategies: Retire, Retain, Rehost, Relocate, Repurchase, Replatform, or Refactor. We build a total cost of ownership (TCO) comparison and a wave plan that groups applications into migration waves of 10–25 applications each. [03_cloud_migration_methodology.md]
+
+3. **Build the Landing Zone (2–4 weeks):** A secure multi-account landing zone built with Terraform, including networking, identity, logging, guardrails, and cost tagging. On AWS, we follow AWS Control Tower and the Well-Architected Framework. [03_cloud_migration_methodology.md]
+
+4. **Migrate in Waves:** Rehost migrations use AWS Application Migration Service (MGN) or Azure Migrate. Databases are migrated with AWS Database Migration Service (DMS), using continuous replication so cutover downtime is typically under 30 minutes. Every wave has a tested rollback plan and a go/no-go checkpoint. [03_cloud_migration_methodology.md]
+
+5. **Optimize and Hand Over:** Right-sizing, Savings Plans or Reserved Instance recommendations, and FinOps dashboards. Clients typically see 25–35% lower infrastructure cost within six months of migration. Includes 30 days of hypercare after the final wave. [03_cloud_migration_methodology.md]
+
+Governance includes a weekly steering report and a migration RAID log (Risks, Assumptions, Issues, Dependencies) shared with the client. [03_cloud_migration_methodology.md]"
+6,Which tools do you use to migrate databases?,True,03_cloud_migration_methodology.md; 08_case_study_bank_migration.pdf,03_cloud_migration_methodology.md,1.288,True,correct,"NimbusEdge Technologies uses AWS Database Migration Service (DMS) to migrate databases, ensuring continuous replication and typically achieving a cutover downtime of under 30 minutes [03_cloud_migration_methodology.md]."
+7,How do you comply with India's data protection law?,True,05_data_privacy_and_governance.md,05_data_privacy_and_governance.md,1.202,True,correct,"NimbusEdge Technologies complies with India's Digital Personal Data Protection Act, 2023 (DPDP Act) by ensuring that client data is stored within the region chosen by the client, with Indian client data stored only in Indian cloud regions by default. We do not move client data across borders without written approval. Additionally, we follow RBI guidelines on IT outsourcing for banking clients in India. [05_data_privacy_and_governance.md]"
+8,How quickly do you notify clients of a data breach?,True,05_data_privacy_and_governance.md,05_data_privacy_and_governance.md,0.499,True,correct,"In the event of a personal data breach, we notify the affected client within 24 hours of confirming the breach, so the client can meet its own regulatory deadlines. [05_data_privacy_and_governance.md]"
+9,What security scanning tools are part of your CI/CD pipeline?,True,07_devops_cicd_practices.md,07_devops_cicd_practices.md,1.035,True,correct,"NimbusEdge Technologies incorporates several security scanning tools into our CI/CD pipeline to ensure robust security at every stage of the software development lifecycle. These tools include:
+
+- **Static code analysis (SAST):** SonarQube is used to identify vulnerabilities in the source code. [07_devops_cicd_practices.md]
+- **Dependency and container image scanning:** Trivy is employed to scan dependencies and container images for known vulnerabilities. [07_devops_cicd_practices.md]
+- **Infrastructure-as-Code scanning:** Checkov is utilized to ensure that our IaC is secure and compliant. [07_devops_cicd_practices.md]
+- **Secret detection:** Gitleaks is integrated to detect and prevent the accidental leakage of sensitive information in the source code. [07_devops_cicd_practices.md]
+
+A build fails automatically if a critical vulnerability is found, ensuring that only secure code is deployed. [07_devops_cicd_practices.md]"
+10,Do you have experience migrating banks to the cloud?,True,08_case_study_bank_migration.pdf,08_case_study_bank_migration.pdf,0.819,True,correct,"Yes, NimbusEdge Technologies has extensive experience migrating banks to the cloud. We successfully completed a core systems migration for a mid-sized private sector bank in India, which involved moving 120 applications to AWS while adhering to RBI data localization rules. This project was executed over 11 months using our NimbusPath migration framework, which involved six migration waves. We built an AWS landing zone in Mumbai with disaster recovery in Hyderabad, ensuring all data remained within India. The migration resulted in a 32% reduction in annual infrastructure costs, zero data loss, and zero security incidents. The project also passed the bank's RBI IT audit with no major findings, and disaster recovery time was reduced from 2 days to under 4 hours. [08_case_study_bank_migration.pdf]"
+11,What certifications does your company hold?,True,01_company_profile.md; 02_information_security_policy.md,01_company_profile.md; 02_information_security_policy.md,0.925,True,correct,"NimbusEdge Technologies holds the following certifications:
+
+- ISO/IEC 27001:2022 (Information Security Management) [02_information_security_policy.md]
+- ISO 9001:2015 (Quality Management) [01_company_profile.md]
+- SOC 2 Type II (renewed annually; latest report covers April 2025 – March 2026) [01_company_profile.md]
+
+These certifications are shared with clients under NDA [02_information_security_policy.md]."
+12,Have you built an RFP response assistant before? What were the results?,True,09_genai_services.md,09_genai_services.md,1.543,True,correct,"Yes, NimbusEdge has built an RFP response assistant for a Dubai-based IT consultancy. This project cut proposal drafting time by 60%. [Source: 09_genai_services.md]"
+13,Do you have experience with blockchain projects?,False,(none: should refuse),-,1.675,True,correctly refused,No relevant information found in historical proposals.
+14,What is your pricing for GenAI projects?,False,(none: should refuse),-,1.265,True,correctly refused,No relevant information found in historical proposals.
+15,What is your employee attrition rate?,False,(none: should refuse),-,1.748,True,correctly refused,No relevant information found in historical proposals.
