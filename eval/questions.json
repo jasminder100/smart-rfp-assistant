@@ -1,96 +1,313 @@
 [
-    {"id": 1, "question": "What is your data encryption policy?",
-     "answerable": true, "expected_sources": ["02_information_security_policy.md"],
-     "keywords": ["AES-256", "TLS 1.2"]},
-  
-    {"id": 2, "question": "What are your RPO and RTO commitments?",
-     "answerable": true, "expected_sources": ["04_disaster_recovery_and_bcp.pdf"],
-     "keywords": ["15 minutes", "4 hours"]},
-  
-    {"id": 3, "question": "What is your response time for a critical P1 incident?",
-     "answerable": true, "expected_sources": ["06_managed_services_sla.md"],
-     "keywords": ["15 minutes"]},
-  
-    {"id": 4, "question": "What availability SLA do you commit to?",
-     "answerable": true, "expected_sources": ["06_managed_services_sla.md"],
-     "keywords": ["99.95%"]},
-  
-    {"id": 5, "question": "What methodology do you follow for cloud migrations?",
-     "answerable": true, "expected_sources": ["03_cloud_migration_methodology.md"],
-     "keywords": ["NimbusPath"]},
-  
-    {"id": 6, "question": "Which tools do you use to migrate databases?",
-     "answerable": true,
-     "expected_sources": ["03_cloud_migration_methodology.md", "08_case_study_bank_migration.pdf"],
-     "keywords": ["DMS"]},
-  
-    {"id": 7, "question": "How do you comply with India's data protection law?",
-     "answerable": true, "expected_sources": ["05_data_privacy_and_governance.md"],
-     "keywords": ["Digital Personal Data Protection"]},
-  
-    {"id": 8, "question": "How quickly do you notify clients of a data breach?",
-     "answerable": true, "expected_sources": ["05_data_privacy_and_governance.md"],
-     "keywords": ["24 hours"]},
-  
-    {"id": 9, "question": "What security scanning tools are part of your CI/CD pipeline?",
-     "answerable": true, "expected_sources": ["07_devops_cicd_practices.md"],
-     "keywords": ["Trivy", "Checkov"]},
-  
-    {"id": 10, "question": "Do you have experience migrating banks to the cloud?",
-     "answerable": true, "expected_sources": ["08_case_study_bank_migration.pdf"],
-     "keywords": ["32%"]},
-  
-    {"id": 11, "question": "What certifications does your company hold?",
-     "answerable": true,
-     "expected_sources": ["01_company_profile.md", "02_information_security_policy.md"],
-     "keywords": ["27001", "SOC 2"]},
-  
-    {"id": 12, "question": "Have you built an RFP response assistant before? What were the results?",
-     "answerable": true, "expected_sources": ["09_genai_services.md"],
-     "keywords": ["60%"]},
-  
-    {"id": 13, "question": "Do you have experience with blockchain projects?",
-     "answerable": false, "expected_sources": [], "keywords": []},
-  
-    {"id": 14, "question": "What is your pricing for GenAI projects?",
-     "answerable": false, "expected_sources": [], "keywords": []},
-  
-    {"id": 15, "question": "What is your employee attrition rate?",
-     "answerable": false, "expected_sources": [], "keywords": []},
-
-     {
-        "id": 16,
-        "question": "How many GenAI projects have you delivered?",
-        "answerable": true,
-        "expected_sources": ["09_genai_services.md"],
-        "keywords": ["12"]
-      },
-      {
-        "id": 17,
-        "question": "Do you work with open-source models?",
-        "answerable": true,
-        "expected_sources": ["09_genai_services.md"],
-        "keywords": ["open-source"]
-      },
-      {
-        "id": 18,
-        "question": "How many engineers are in the Bengaluru delivery centre?",
-        "answerable": false,
-        "expected_sources": [],
-        "keywords": []
-      },
-      {
-        "id": 19,
-        "question": "What GenAI services do you offer?",
-        "answerable": true,
-        "expected_sources": ["09_genai_services.md"],
-        "keywords": ["RAG", "chatbots"]
-      },
-      {
-        "id": 20,
-        "question": "Which AI platforms and models do you work with?",
-        "answerable": true,
-        "expected_sources": ["09_genai_services.md"],
-        "keywords": ["Bedrock", "Azure OpenAI"]
-      }
-  ]
+  {
+    "id": 1,
+    "question": "What is your data encryption policy?",
+    "answerable": true,
+    "expected_sources": [
+      "02_information_security_policy.md"
+    ],
+    "keywords": [
+      "AES-256",
+      "TLS 1.2"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "What are your RPO and RTO commitments?",
+    "answerable": true,
+    "expected_sources": [
+      "04_disaster_recovery_and_bcp.pdf"
+    ],
+    "keywords": [
+      "15 minutes",
+      "4 hours"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "What is your response time for a critical P1 incident?",
+    "answerable": true,
+    "expected_sources": [
+      "06_managed_services_sla.md"
+    ],
+    "keywords": [
+      "15 minutes"
+    ]
+  },
+  {
+    "id": 4,
+    "question": "What availability SLA do you commit to?",
+    "answerable": true,
+    "expected_sources": [
+      "06_managed_services_sla.md"
+    ],
+    "keywords": [
+      "99.95%"
+    ]
+  },
+  {
+    "id": 5,
+    "question": "What methodology do you follow for cloud migrations?",
+    "answerable": true,
+    "expected_sources": [
+      "03_cloud_migration_methodology.md"
+    ],
+    "keywords": [
+      "NimbusPath"
+    ]
+  },
+  {
+    "id": 6,
+    "question": "Which tools do you use to migrate databases?",
+    "answerable": true,
+    "expected_sources": [
+      "03_cloud_migration_methodology.md",
+      "08_case_study_bank_migration.pdf"
+    ],
+    "keywords": [
+      "DMS"
+    ]
+  },
+  {
+    "id": 7,
+    "question": "How do you comply with India's data protection law?",
+    "answerable": true,
+    "expected_sources": [
+      "05_data_privacy_and_governance.md"
+    ],
+    "keywords": [
+      "Digital Personal Data Protection"
+    ]
+  },
+  {
+    "id": 8,
+    "question": "How quickly do you notify clients of a data breach?",
+    "answerable": true,
+    "expected_sources": [
+      "05_data_privacy_and_governance.md"
+    ],
+    "keywords": [
+      "24 hours"
+    ]
+  },
+  {
+    "id": 9,
+    "question": "What security scanning tools are part of your CI/CD pipeline?",
+    "answerable": true,
+    "expected_sources": [
+      "07_devops_cicd_practices.md"
+    ],
+    "keywords": [
+      "Trivy",
+      "Checkov"
+    ]
+  },
+  {
+    "id": 10,
+    "question": "Do you have experience migrating banks to the cloud?",
+    "answerable": true,
+    "expected_sources": [
+      "08_case_study_bank_migration.pdf"
+    ],
+    "keywords": [
+      "32%"
+    ]
+  },
+  {
+    "id": 11,
+    "question": "What certifications does your company hold?",
+    "answerable": true,
+    "expected_sources": [
+      "01_company_profile.md",
+      "02_information_security_policy.md"
+    ],
+    "keywords": [
+      "27001",
+      "SOC 2"
+    ]
+  },
+  {
+    "id": 12,
+    "question": "Have you built an RFP response assistant before? What were the results?",
+    "answerable": true,
+    "expected_sources": [
+      "09_genai_services.md"
+    ],
+    "keywords": [
+      "60%"
+    ]
+  },
+  {
+    "id": 13,
+    "question": "Do you have experience with blockchain projects?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": []
+  },
+  {
+    "id": 14,
+    "question": "What is your pricing for GenAI projects?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": []
+  },
+  {
+    "id": 15,
+    "question": "What is your employee attrition rate?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": []
+  },
+  {
+    "id": 16,
+    "question": "How many GenAI projects have you delivered?",
+    "answerable": true,
+    "expected_sources": [
+      "09_genai_services.md"
+    ],
+    "keywords": [
+      "12"
+    ]
+  },
+  {
+    "id": 17,
+    "question": "Do you work with open-source models?",
+    "answerable": true,
+    "expected_sources": [
+      "09_genai_services.md"
+    ],
+    "keywords": [
+      "open-source"
+    ]
+  },
+  {
+    "id": 18,
+    "question": "How many engineers are in the Bengaluru delivery centre?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": []
+  },
+  {
+    "id": 19,
+    "question": "What GenAI services do you offer?",
+    "answerable": true,
+    "expected_sources": [
+      "09_genai_services.md"
+    ],
+    "keywords": [
+      "RAG",
+      "chatbots"
+    ]
+  },
+  {
+    "id": 20,
+    "question": "Which AI platforms and models do you work with?",
+    "answerable": true,
+    "expected_sources": [
+      "09_genai_services.md"
+    ],
+    "keywords": [
+      "Bedrock",
+      "Azure OpenAI"
+    ]
+  },
+  {
+    "question": "Is our data encrypted when it is stored, and with which algorithm?",
+    "answerable": true,
+    "expected_sources": [
+      "02_information_security_policy.md"
+    ],
+    "keywords": [
+      "AES-256"
+    ],
+    "id": 21
+  },
+  {
+    "question": "How long do you take to tell us if our personal data has been breached?",
+    "answerable": true,
+    "expected_sources": [
+      "05_data_privacy_and_governance.md"
+    ],
+    "keywords": [
+      "24 hours"
+    ],
+    "id": 22
+  },
+  {
+    "question": "What uptime do you guarantee, and what happens if you miss it?",
+    "answerable": true,
+    "expected_sources": [
+      "06_managed_services_sla.md"
+    ],
+    "keywords": [
+      "99.95"
+    ],
+    "id": 23
+  },
+  {
+    "question": "Do you hold a SOC 2 report?",
+    "answerable": true,
+    "expected_sources": [
+      "02_information_security_policy.md"
+    ],
+    "keywords": [
+      "SOC 2"
+    ],
+    "id": 24
+  },
+  {
+    "question": "How big was the team on the bank migration project?",
+    "answerable": true,
+    "expected_sources": [
+      "08_case_study_bank_migration.pdf"
+    ],
+    "keywords": [
+      "28"
+    ],
+    "id": 25
+  },
+  {
+    "question": "How often do you test your disaster recovery plan?",
+    "answerable": true,
+    "expected_sources": [
+      "04_disaster_recovery_and_bcp.pdf"
+    ],
+    "keywords": [
+      "twice a year"
+    ],
+    "id": 26
+  },
+  {
+    "question": "Does our data stay inside India?",
+    "answerable": true,
+    "expected_sources": [
+      "05_data_privacy_and_governance.md",
+      "04_disaster_recovery_and_bcp.pdf"
+    ],
+    "keywords": [
+      "India"
+    ],
+    "id": 27
+  },
+  {
+    "question": "Do you have an office in Singapore?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": [],
+    "id": 28
+  },
+  {
+    "question": "Do you offer quantum computing consulting?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": [],
+    "id": 29
+  },
+  {
+    "question": "Which streaming platform do you use for Kafka-based event pipelines?",
+    "answerable": false,
+    "expected_sources": [],
+    "keywords": [],
+    "id": 30
+  }
+]
