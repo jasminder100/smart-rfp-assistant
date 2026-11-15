@@ -9,3 +9,4 @@ pypdf
 fastapi[standard]
 streamlit
 requests
+rank_bm25

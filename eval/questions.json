@@ -56,5 +56,41 @@
      "answerable": false, "expected_sources": [], "keywords": []},
   
     {"id": 15, "question": "What is your employee attrition rate?",
-     "answerable": false, "expected_sources": [], "keywords": []}
+     "answerable": false, "expected_sources": [], "keywords": []},
+
+     {
+        "id": 16,
+        "question": "How many GenAI projects have you delivered?",
+        "answerable": true,
+        "expected_sources": ["09_genai_services.md"],
+        "keywords": ["12"]
+      },
+      {
+        "id": 17,
+        "question": "Do you work with open-source models?",
+        "answerable": true,
+        "expected_sources": ["09_genai_services.md"],
+        "keywords": ["open-source"]
+      },
+      {
+        "id": 18,
+        "question": "How many engineers are in the Bengaluru delivery centre?",
+        "answerable": false,
+        "expected_sources": [],
+        "keywords": []
+      },
+      {
+        "id": 19,
+        "question": "What GenAI services do you offer?",
+        "answerable": true,
+        "expected_sources": ["09_genai_services.md"],
+        "keywords": ["RAG", "chatbots"]
+      },
+      {
+        "id": 20,
+        "question": "Which AI platforms and models do you work with?",
+        "answerable": true,
+        "expected_sources": ["09_genai_services.md"],
+        "keywords": ["Bedrock", "Azure OpenAI"]
+      }
   ]
