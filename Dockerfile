@@ -16,6 +16,7 @@ RUN uv pip install --system --no-cache -r requirements.txt
 # 2. Then copy our code (changes often, so it goes last)
 COPY app/ app/
 COPY ui/ ui/
+COPY .streamlit/ .streamlit/
 COPY scripts/ scripts/
 COPY eval/ eval/
 
