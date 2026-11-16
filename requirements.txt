@@ -10,3 +10,4 @@ fastapi[standard]
 streamlit
 requests
 rank_bm25
+openpyxl
