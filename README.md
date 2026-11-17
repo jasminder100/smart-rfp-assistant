@@ -20,6 +20,35 @@ Second, the model is not asked to simply write an answer. It has to return a sma
 
 Third, the answer is cited. Only files that are actually named in the answer are shown as sources, so an answer can't look sourced when it isn't.
 
+ ## Filling a whole questionnaire (Excel)
+
+Real RFPs usually arrive as a spreadsheet with dozens of questions. The **Fill a questionnaire** tab answers the whole sheet in one go.
+
+![Fill a questionnaire tab](docs/fill-tab.png)
+
+**How to use it**
+
+1. Open the **Fill a questionnaire** tab.
+2. Upload an `.xlsx` file with a `Question` column. The app finds the header row automatically and shows a preview with the number of questions found.
+3. Click **Fill answers**. Each question is answered from the indexed proposals.
+4. Click **Download filled questionnaire**.
+
+The downloaded file gets three new columns next to each question:
+
+| Column | Meaning |
+|---|---|
+| Answer | The drafted answer, or "No relevant information found in historical proposals." |
+| Source | The document(s) the answer came from. Empty for refused questions. |
+| Status | `Answered`, `Refused` or `Error` |
+
+On the included sample sheet (`sample_rfp_questionnaire.xlsx`, 20 questions) the app answers 16 with the correct source and refuses the 4 that the proposals do not cover (revenue, Singapore, Pune, blockchain), matching the answer key.
+
+**API:** the same feature is available at `POST /fill`. Upload the file as `file`. The filled workbook is returned, and the counts are in the `X-Total`, `X-Answered`, `X-Refused` and `X-Errors` response headers.
+
+**Limits:** `.xlsx` only, at most 200 questions per sheet, and the upload size limit set by `MAX_UPLOAD_MB`. A row that fails is marked `Error` and does not stop the rest of the sheet.
+
+**Tip:** if many rows come back as Refused, the answer is probably missing from the knowledge base. Add the relevant past proposal from the sidebar, then run the sheet again.
+
 ## Running it
 
 You need Docker, and an AWS account with access to the Bedrock models you want to use. The project calls Bedrock for both embeddings and answer generation, so it costs a small amount of AWS credit per question and per ingested document.
