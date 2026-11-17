@@ -1,12 +1,17 @@
 import html
 import os
 import re
-
+import pandas as pd
 import requests
 import streamlit as st
 
+from io import BytesIO
+
+from openpyxl import load_workbook
+
 API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 NO_INFO = "No relevant information found in historical proposals."
+XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 EXAMPLES = [
     "What is your data encryption policy?",
@@ -171,6 +176,27 @@ def error_text(resp):
         return resp.json().get("detail", resp.text)
     except ValueError:
         return resp.text
+    
+def preview_xlsx(data, n=5):
+    """Find the header row (has a 'Question' column) and return (header, first n rows, total rows)."""
+    wb = load_workbook(BytesIO(data), read_only=True, data_only=True)
+    ws = wb.worksheets[0]
+    rows = [["" if v is None else str(v).strip() for v in r] for r in ws.iter_rows(values_only=True)]
+
+    for i, r in enumerate(rows[:15]):
+        if any(re.match(r"^questions?\b", c.lower()) for c in r if c):
+            header, seen = [], set()
+            for j, c in enumerate(r):
+                name = c or f"Col {j + 1}"
+                while name in seen:
+                    name += "_"
+                seen.add(name)
+                header.append(name)
+            q_idx = next(j for j, c in enumerate(r) if re.match(r"^questions?\b", c.lower()))
+            body = [x for x in rows[i + 1:] if len(x) > q_idx and x[q_idx]]
+            body = [x + [""] * (len(header) - len(x)) for x in body]
+            return header, body[:n], len(body)
+    return None, None, 0
 
 
 def ask_api(question):
@@ -281,40 +307,104 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-with st.form("ask_form", clear_on_submit=True):
-    col_q, col_b = st.columns([6, 1.5])
-    with col_q:
-        typed = st.text_input(
-            "Question",
-            placeholder="Ask a question from an RFP, e.g. What is your data encryption policy?",
-            label_visibility="collapsed",
-        )
-    with col_b:
-        sent = st.form_submit_button("Draft answer")
+tab_ask, tab_fill = st.tabs(["Ask a question", "Fill a questionnaire"])
 
-question = None
-if sent and typed.strip():
-    question = typed.strip()
-elif st.session_state.get("pending"):
-    question = st.session_state.pop("pending")
+# ---------------- Tab 1: single question (your existing code, indented) ----------------
+with tab_ask:
+    with st.form("ask_form", clear_on_submit=True):
+        col_q, col_b = st.columns([6, 1.5])
+        with col_q:
+            typed = st.text_input(
+                "Question",
+                placeholder="Ask a question from an RFP, e.g. What is your data encryption policy?",
+                label_visibility="collapsed",
+            )
+        with col_b:
+            sent = st.form_submit_button("Draft answer")
 
-if question:
-    if len(question) < 3:
-        st.warning("Please enter a longer question.")
+    question = None
+    if sent and typed.strip():
+        question = typed.strip()
+    elif st.session_state.get("pending"):
+        question = st.session_state.pop("pending")
+
+    if question:
+        if len(question) < 3:
+            st.warning("Please enter a longer question.")
+        else:
+            with st.spinner("Searching past proposals..."):
+                answer = ask_api(question)
+            st.session_state.history.insert(0, {"q": question, "a": answer})
+
+    if not st.session_state.history:
+        st.markdown('<div class="section-label">Common RFP questions</div>', unsafe_allow_html=True)
+        for row in range(0, len(EXAMPLES), 3):
+            cols = st.columns(3)
+            for col, example in zip(cols, EXAMPLES[row:row + 3]):
+                with col:
+                    if st.button(example, key=f"ex_{example}"):
+                        st.session_state.pending = example
+                        st.rerun()
     else:
-        with st.spinner("Searching past proposals..."):
-            answer = ask_api(question)
-        st.session_state.history.insert(0, {"q": question, "a": answer})
+        for entry in st.session_state.history:
+            render_entry(entry)
 
-if not st.session_state.history:
-    st.markdown('<div class="section-label">Common RFP questions</div>', unsafe_allow_html=True)
-    for row in range(0, len(EXAMPLES), 3):
-        cols = st.columns(3)
-        for col, example in zip(cols, EXAMPLES[row:row + 3]):
-            with col:
-                if st.button(example, key=f"ex_{example}"):
-                    st.session_state.pending = example
-                    st.rerun()
-else:
-    for entry in st.session_state.history:
-        render_entry(entry)
+# ---------------- Tab 2: Excel questionnaire ----------------
+with tab_fill:
+    st.markdown('<div class="section-label">Upload a client questionnaire</div>', unsafe_allow_html=True)
+    st.caption("An .xlsx file with a 'Question' column. Answers, sources and status will be added next to each question.")
+
+    sheet = st.file_uploader("Questionnaire", type=["xlsx"], label_visibility="collapsed", key="xlsx_upload")
+
+    if sheet:
+        data = sheet.getvalue()
+        st.markdown(f"**{html.escape(sheet.name)}** &nbsp;·&nbsp; {len(data) / 1024:.0f} KB", unsafe_allow_html=True)
+        try:
+            header, body, total = preview_xlsx(data)
+            if header is None:
+                st.warning("Could not find a 'Question' column in the first 15 rows. Please check the sheet.")
+            else:
+                st.caption(f"{total} questions found. Showing the first {len(body)}:")
+                st.dataframe(pd.DataFrame(body, columns=header), hide_index=True, use_container_width=True)
+        except Exception:
+            st.warning("Could not read this file. It may not be a valid .xlsx.")
+        
+        if st.button("Fill answers", type="primary"):
+            with st.spinner("Answering every question... this can take a minute or two."):
+                try:
+                    resp = requests.post(
+                        f"{API_URL}/fill",
+                        files={"file": (sheet.name, data, XLSX_MIME)},
+                        timeout=600,
+                    )
+                    if resp.ok:
+                        st.session_state.filled = {
+                            "source": sheet.name,
+                            "bytes": resp.content,
+                            "name": sheet.name.rsplit(".", 1)[0] + "_filled.xlsx",
+                            "total": resp.headers.get("X-Total"),
+                            "answered": resp.headers.get("X-Answered"),
+                            "refused": resp.headers.get("X-Refused"),
+                            "errors": resp.headers.get("X-Errors"),
+                        }
+                    else:
+                        st.error(error_text(resp))
+                except requests.RequestException as e:
+                    st.error(f"Could not reach the API: {e}")
+
+        if st.session_state.get("filled", {}).get("source") == sheet.name:
+            f = st.session_state.filled
+            st.success(
+                f"Done: {f['answered']} answered, {f['refused']} refused, "
+                f"{f['errors']} errors (out of {f['total']})."
+            )
+            if f["errors"] not in (None, "0"):
+                st.warning("Some rows hit an error. Check the Status column in the downloaded file.")
+            st.download_button(
+                "Download filled questionnaire",
+                data=f["bytes"],
+                file_name=f["name"],
+                mime=XLSX_MIME,
+                type="primary",
+            )
+            st.caption("Review every answer before it goes to the client. Rows marked Refused need a human to answer.")

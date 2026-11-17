@@ -1,13 +1,18 @@
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from pydantic import BaseModel, Field
+from app.questionnaire import QuestionnaireError, fill_questionnaire
 
 from app.ingest import DOCS_DIR, SUPPORTED, add_file
 from app.rag import answer_question
 
+
+
 MAX_UPLOAD_MB = 10
+XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
 
 app = FastAPI(
     title="Smart RFP Response Assistant",
@@ -87,4 +92,35 @@ def upload(file: UploadFile = File(...)):
         filename=filename,
         chunks_added=n,
         message="Indexed. You can ask questions about it now.",
+    )
+    
+@app.post("/fill")
+def fill(file: UploadFile = File(...)):
+    """Upload an Excel questionnaire, get it back with Answer / Source / Status filled in."""
+    filename = Path(file.filename or "").name
+    if Path(filename).suffix.lower() != ".xlsx":
+        raise HTTPException(400, "Please upload an .xlsx Excel file.")
+
+    data = file.file.read()
+    if not data:
+        raise HTTPException(400, "The file is empty.")
+    if len(data) > MAX_UPLOAD_MB * 1024 * 1024:
+        raise HTTPException(413, f"File too large. Max {MAX_UPLOAD_MB} MB.")
+
+    try:
+        filled, summary = fill_questionnaire(data)
+    except QuestionnaireError as e:
+        raise HTTPException(422, str(e))
+
+    out_name = f"{Path(filename).stem}_filled.xlsx"
+    return Response(
+        content=filled,
+        media_type=XLSX_MIME,
+        headers={
+            "Content-Disposition": f'attachment; filename="{out_name}"',
+            "X-Total": str(summary["total"]),
+            "X-Answered": str(summary["answered"]),
+            "X-Refused": str(summary["refused"]),
+            "X-Errors": str(summary["errors"]),
+        },
     )
