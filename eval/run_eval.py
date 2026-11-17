@@ -3,7 +3,7 @@ import csv
 import json
 import time
 from pathlib import Path
-
+import sys
 from app.rag import MAX_DISTANCE, NO_INFO, answer_question
 
 QUESTIONS = Path("eval/questions.json")
@@ -74,12 +74,28 @@ def write_reports(rows, threshold):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-distance", type=float, default=None)
+    parser.add_argument("--min-score", type=int, default=None,
+                        help="Exit with code 1 if fewer than this many questions pass.")
+    parser.add_argument("--delay", type=float, default=0.0,
+                        help="Seconds to wait between questions (helps with rate limits).")
     args = parser.parse_args()
 
     threshold = args.max_distance if args.max_distance is not None else MAX_DISTANCE
-    rows = run_eval(max_distance=args.max_distance)
+    rows = run_eval(max_distance=args.max_distance, delay=args.delay)
     write_reports(rows, threshold)
 
     score = sum(r["passed"] for r in rows)
     print(f"\nScore: {score}/{len(rows)} at MAX_DISTANCE={threshold}")
     print(f"Reports written to {RESULTS_MD} and {RESULTS_CSV}")
+
+    failed = [r for r in rows if not r["passed"]]
+    if failed:
+        print("\nFailed questions:")
+        for r in failed:
+            print(f"  #{r['id']}  {r['question']}  ({r['reason']})")
+
+    if args.min_score is not None:
+        if score < args.min_score:
+            print(f"\nGATE FAILED: score {score} is below the minimum of {args.min_score}.")
+            sys.exit(1)
+        print(f"\nGATE PASSED: score {score} meets the minimum of {args.min_score}.")
