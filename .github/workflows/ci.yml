@@ -40,6 +40,16 @@ jobs:
 
       - name: Build image
         run: docker build -t rfp-api:ci .
+      
+      - name: Scan image for vulnerabilities (report only)
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.57.1 image \
+              --severity HIGH,CRITICAL \
+              --ignore-unfixed \
+              --exit-code 0 \
+              rfp-api:ci
 
       - name: Start the API container
         run: docker run -d --name rfp-api -p 8000:8000 rfp-api:ci
