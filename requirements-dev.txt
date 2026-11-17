@@ -1,0 +1,14 @@
+boto3
+python-dotenv
+langchain-community
+langchain-text-splitters
+langchain-aws
+langchain-chroma
+chromadb
+pypdf
+fastapi[standard]
+streamlit
+requests
+rank_bm25
+openpyxl
+pytest
