@@ -8,3 +8,4 @@ __pycache__/
 .DS_Store
 
 samples/*_filled.xlsx
+*_filled.xlsx
